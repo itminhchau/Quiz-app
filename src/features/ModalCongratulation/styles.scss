@@ -1,0 +1,31 @@
+.modal-congratulation{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 300px;
+    align-items: center;
+    justify-content: space-around;
+    .img-congratulation{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #d3d3d3;
+    }
+    .btn-play-again{
+        width: 150px;
+        height: 50px;
+        background-color: #e72c2c;
+        color: #fff;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        &:hover{
+            box-shadow: 2px 2px 2px 2px #888888;
+        }
+    }
+    .congratulation{
+        font-size: 20px;
+        font-weight: 600;
+        
+    }
+}
