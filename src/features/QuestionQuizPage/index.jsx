@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+/* eslint-disable no-self-assign */
+import classNames from 'classnames';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import questionApi from '../../api/questionApi';
 import back from '../../assets/image/remove.png';
@@ -17,6 +19,9 @@ function QuestionQuizPage(props) {
     const [isOpen, setIsOpen] = useState(false)
     const [total, setTotal] = useState(0)
     const [totalTime, setTotalTime] = useState(0)
+    const [openButtonNext, setOpenButtonNext] = useState(false)
+
+    let timeOutRef = useRef(0)
 
     useEffect(() => {
         (async () => {
@@ -25,15 +30,18 @@ function QuestionQuizPage(props) {
             setListQuestion(results)
         })()
     }, [])
+
     const handleNext = () => {
         if (numberQuestion >= listQuestion.length - 1) {
             openModal()
+            handleClearTimeOut()
             return
         }
         const number = numberQuestion + 1
         setNumberQuestion(number)
 
     }
+
     const shuffleArray = (arr) => {
         if (!arr) return
         for (let i = arr.length - 1; i > 0; i--) {
@@ -75,6 +83,7 @@ function QuestionQuizPage(props) {
     const openModal = () => {
         setIsOpen(true)
     }
+
     const closeModal = () => {
         setIsOpen(false)
         history.push('/question')
@@ -84,14 +93,31 @@ function QuestionQuizPage(props) {
 
     }
 
-    const time = setTimeout(() => {
-        setTotalTime(totalTime + 1)
-    }, 1000);
-    if (numberQuestion >= listQuestion.length - 1) {
-        clearTimeout(time)
+    useEffect(() => {
+        timeOutRef.current = setTimeout(() => {
+            setTotalTime(prevTotalTime => prevTotalTime + 1)
+
+        }, 1000);
+    }, [totalTime])
+
+    const handleClearTimeOut = () => {
+
+        clearTimeout(timeOutRef.current)
     }
 
-    const correctAnswer = listQuestion && listQuestion[numberQuestion].correct_answer
+
+    const handleCheckToShowButtonNext = (value) => {
+        setOpenButtonNext(value)
+    }
+
+    useEffect(() => {
+        setOpenButtonNext(false)
+    }, [numberQuestion])
+
+    const correctAnswer = listQuestion && listQuestion[numberQuestion].correct_answer;
+
+    console.log("check total time", totalTime);
+
     return (
         <div className='wrap-question'>
             <div className='container'>
@@ -99,13 +125,17 @@ function QuestionQuizPage(props) {
                 <TextQuestion numberQuestion={numberQuestion} dataQuestion={listQuestion[numberQuestion]} />
                 <div className="wrapper-answer">
 
-                    <TextAnswer arrayAnswer={arrayAnswer} totalCorrectAnswer={totalCorrectAnswer} correctAnswer={correctAnswer} numberQuestion={numberQuestion} />
+                    <TextAnswer onCheckToShowButtonNext={handleCheckToShowButtonNext} arrayAnswer={arrayAnswer} totalCorrectAnswer={totalCorrectAnswer} correctAnswer={correctAnswer} numberQuestion={numberQuestion} />
 
                 </div>
 
-                <button className='btn-next' onClick={handleNext}>{
-                    numberQuestion === listQuestion.length - 1 ? "Done" : "next"
-                }</button>
+                <button className={
+                    classNames(
+                        openButtonNext === true ? 'btn-next' : 'btn-next disabled-button'
+                    )
+                } onClick={handleNext}>{
+                        numberQuestion === listQuestion.length - 1 ? "Done" : "next"
+                    }</button>
                 <ModalCongratulation total={total} totalTime={totalTime} isOpen={isOpen} onCloseModal={closeModal} />
             </div>
 

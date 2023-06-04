@@ -23,9 +23,19 @@
             &:hover{
                 box-shadow: 2px 2px 2px 2px #888888;
             }
+         &.disabled-button {
+                pointer-events: none;
+                /* Additional styling if desired */
+                opacity: 0.5;
+                cursor: not-allowed;
+              }
         }
+        background-image: url('../../assets/image/background.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
         .wrapper-answer{
-            height: 300px;
+            height: 400px;
             width: 100%;
         }
         .btn-back{
@@ -37,5 +47,5 @@
             cursor: pointer;
         }
     }
-
+   
 }

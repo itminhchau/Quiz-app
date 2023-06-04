@@ -7,19 +7,23 @@ TextAnswer.propTypes = {
 
 };
 
-function TextAnswer({ arrayAnswer, correctAnswer, totalCorrectAnswer }) {
+function TextAnswer({ arrayAnswer, correctAnswer, totalCorrectAnswer, onCheckToShowButtonNext }) {
     const [highlightedIndex, setHighlightedIndex] = useState(null);
     const [checked, setChecked] = useState(false)
     const [disabled, setDisabled] = useState(false)
+    const [click, setClick] = useState(false)
 
     const handleClick = (index, item) => {
         setHighlightedIndex(index);
         setDisabled(true)
         setChecked(false)
+        setClick(true)
+        onCheckToShowButtonNext(true)
         if (item.value === correctAnswer) {
             setChecked(true)
             totalCorrectAnswer()
         }
+
 
     };
 
@@ -27,8 +31,8 @@ function TextAnswer({ arrayAnswer, correctAnswer, totalCorrectAnswer }) {
         setHighlightedIndex(null);
         setDisabled(false)
         setChecked(false)
+        setClick(false)
     }, [arrayAnswer])
-
     return (
         <div className='wrap-answer'>
             {arrayAnswer && arrayAnswer.map((item, index) => {
@@ -55,6 +59,11 @@ function TextAnswer({ arrayAnswer, correctAnswer, totalCorrectAnswer }) {
                     </div>
                 )
             })}
+            {click && click === true &&
+                <div className='wrap-text-answer-correct' >
+                    <span style={{ color: "white" }}>AnswerCorrect is : {correctAnswer}</span>
+                </div>
+            }
 
         </div>
     );
