@@ -116,7 +116,6 @@ function QuestionQuizPage(props) {
 
     const correctAnswer = listQuestion && listQuestion[numberQuestion].correct_answer;
 
-    console.log("check total time", totalTime);
 
     return (
         <div className='wrap-question'>

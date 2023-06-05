@@ -14,7 +14,7 @@ function HomeQuizPage(props) {
     return (
         <div className='wrap-home'>
             <div className='container'>
-                <img src={logo} alt="" srcset="" className='logo' />
+                <img src={logo} alt="logo" className='logo' />
                 <button className='btn-start' onClick={handleOnclick}>Start Quiz</button>
             </div>
         </div>
